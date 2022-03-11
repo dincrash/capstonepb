@@ -38,11 +38,12 @@ def test_clearpath():
     output = "./output"
     if not os.path.exists(output):
         os.makedirs(output)
-    mydict = {"path_to_save_files": "./output", "file_name": "super_data777"}
-    out = mydict["path_to_save_files"] + "/" + mydict["file_name"]
+    path = "./output"
+    filename = "super_data777"
+    out = path + "/" + filename
     with open(out, 'w', encoding="cp1251") as f:
-        json.dump(mydict, f, ensure_ascii=False)
-    clear_path(mydict["path_to_save_files"],mydict["file_name"])
+        json.dump(filename, f, ensure_ascii=False)
+    clear_path(path, filename)
     assert os.path.isfile(out) is False
 
 
