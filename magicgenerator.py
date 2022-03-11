@@ -106,41 +106,45 @@ def clear_path(paths, filenames):
             print("file removed:" + paths + "/" + filename)
 
 
-def cf_multiprocessing(mydict):
+def cf_multiprocessing(filecount, path, filename, prefix, dataschema, multiprocessing):
     ll = {"path": [], "json": []}
     i = 0
     outdict = []
-    while i < mydict["file_count"]:
+    while i < filecount:
         ll["path"].append(
-            generate_json_file_name(mydict["path_to_save_files"], mydict["file_name"], mydict["prefix"], i))
-        ll["json"].append(read_json(mydict['data_schema']))
+            generate_json_file_name(path, filename, prefix, i))
+        ll["json"].append(read_json(dataschema))
         outdict.append(ll)
         i = i + 1
         ll = {"path": [], "json": []}
-    if mydict["multiprocessing"] < 0:
+    if multiprocessing < 0:
         exit(1)
-    if mydict["multiprocessing"] <= os.cpu_count():
-        print("multiprocessing=" + str(mydict["multiprocessing"]))
-        with Pool(mydict["multiprocessing"]) as p:
+    if multiprocessing <= os.cpu_count():
+        print("multiprocessing=" + str(multiprocessing))
+        with Pool(multiprocessing) as p:
             p.map(create_file, outdict)
-    if mydict["multiprocessing"] > os.cpu_count():
-        print("multiprocessing=" + str(mydict["multiprocessing"]))
+    if multiprocessing > os.cpu_count():
+        print("multiprocessing=" + str(multiprocessing))
         with Pool(os.cpu_count()) as p:
             p.map(create_file, outdict)
 
 
 def main():
     pars = argparse.ArgumentParser(prog='Console Utility (CU)')
-    mydict = print_name_address(pars)
-    path = mydict["path_to_save_files"]
-    filename = mydict["file_name"]
-    clearpath = mydict["clear_path"]
-    print(mydict)
+    input_param = print_name_address(pars)
+    path = input_param["path_to_save_files"]
+    filename = input_param["file_name"]
+    clearpath = input_param["clear_path"]
+    filecount = input_param["file_count"]
+    prefix = input_param["prefix"]
+    dataschema = input_param['data_schema']
+    multiprocessing = input_param["multiprocessing"]
+    print(input_param)
     if not os.path.exists(path):
         os.makedirs(path)
     if clearpath is True:
         clear_path(path, filename)
-    cf_multiprocessing(mydict)
+    cf_multiprocessing(filecount, path, filename, prefix, dataschema, multiprocessing)
 
 
 if __name__ == '__main__':

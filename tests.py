@@ -60,9 +60,7 @@ def test_countfiles_multiprocessing():
     if not os.path.exists(output):
         os.makedirs(output)
     count_files = 10
-    mydict = {"multiprocessing": 1, "data_schema": "./schema.json", "path_to_save_files": "./output",
-              "file_name": "super_data999", "file_count": count_files, "prefix": "count"}
-    cf_multiprocessing(mydict)
+    cf_multiprocessing(count_files, "./output", "super_data999", "count", "./schema.json", 1)
     i = 0
     for filename in os.listdir("./output"):
         if filename.startswith("super_data999"):
