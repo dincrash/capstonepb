@@ -10,9 +10,8 @@ import uuid
 from multiprocessing import Pool
 
 
-
 # help
-# python magicgenerator.py -h
+# python3 magicgenerator.py -h
 
 
 def print_name_address(parser: argparse.Namespace) -> dict:
@@ -81,14 +80,14 @@ def generate_name():
 def generate_json_file_name(mydict, i):
     complete_name = None
     if mydict["prefix"] == "count":
-        complete_name = os.path.join(mydict["path_to_save_files"] + "/" + mydict["file_name"] + "_" + str(i) + ".json")
+        complete_name = os.path.join(mydict["path_to_save_files"], mydict["file_name"] + "_" + str(i) + ".json")
     if mydict["prefix"] == "random":
         complete_name = os.path.join(
-            mydict["path_to_save_files"] + "/" + mydict["file_name"] + "_" + (
+            mydict["path_to_save_files"], mydict["file_name"] + "_" + (
                 ''.join(random.choice(string.digits) for _ in range(4))) + ".json")
     if mydict["prefix"] == "uuid":
         complete_name = os.path.join(
-            mydict["path_to_save_files"] + "/" + mydict["file_name"] + "_" + str(uuid.uuid4()) + ".json")
+            mydict["path_to_save_files"], mydict["file_name"] + "_" + str(uuid.uuid4()) + ".json")
     return complete_name
 
 
@@ -104,11 +103,11 @@ def generate_json_output(mydict):
     return read_json(mydict)
 
 
-def clear_path(mydict):
-    for filename in os.listdir(mydict["path_to_save_files"]):
-        if filename.startswith(mydict["file_name"]):
-            os.remove(mydict["path_to_save_files"] + "/" + filename)
-            print("file removed:" + mydict["path_to_save_files"] + "/" + filename)
+def clear_path(paths, filenames):
+    for filename in os.listdir(paths):
+        if filename.startswith(filenames):
+            os.remove(paths + "/" + filename)
+            print("file removed:" + paths + "/" + filename)
 
 
 def cf_multiprocessing(mydict):
@@ -140,7 +139,7 @@ def main():
     if not os.path.exists(mydict["path_to_save_files"]):
         os.makedirs(mydict["path_to_save_files"])
     if mydict["clear_path"] is True:
-        clear_path(mydict)
+        clear_path(mydict["path_to_save_files"], mydict["file_name"])
     cf_multiprocessing(mydict)
 
 

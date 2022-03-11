@@ -31,7 +31,7 @@ def test_temporaryfiles(tmp_path):
     d.mkdir()
     p = d / "schema.json"
     m = Mock()
-    print(m.main(p))
+    m.main(p)
 
 
 def test_clearpath():
