@@ -42,7 +42,7 @@ def test_clearpath():
     out = mydict["path_to_save_files"] + "/" + mydict["file_name"]
     with open(out, 'w', encoding="cp1251") as f:
         json.dump(mydict, f, ensure_ascii=False)
-    clear_path(mydict)
+    clear_path(mydict["path_to_save_files"],mydict["file_name"])
     assert os.path.isfile(out) is False
 
 
