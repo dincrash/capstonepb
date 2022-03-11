@@ -12,8 +12,8 @@ DATA_SCHEM_FORTEST = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\":
 
 
 @pytest.mark.parametrize("a, expected_result, expected_str",
-                         [({'data_schema': "./schema.json"}, 100, 'partner'),
-                          ({'data_schema': DATA_SCHEM_FORTEST}, 100, 'partner')])
+                         [("./schema.json", 100, 'partner'),
+                          (DATA_SCHEM_FORTEST, 100, 'partner')])
 def test_datatype(a, expected_result, expected_str):
     assert type(read_json(a)['age']) is type(expected_result)
     assert type(read_json(a)['date']) is type(expected_result)
@@ -23,7 +23,7 @@ def test_datatype(a, expected_result, expected_str):
 
 def test_dataschema():
     with mock.patch('random.choice', mock.Mock(return_value='client')):
-        assert "client" == read_json({'data_schema': "./schema.json"})['type']
+        assert "client" == read_json("./schema.json")['type']
 
 
 def test_temporaryfiles(tmp_path):

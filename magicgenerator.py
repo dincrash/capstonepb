@@ -48,13 +48,13 @@ def print_name_address(parser: argparse.Namespace) -> dict:
                              'With path to json file with schema 2) with schema entered to command line. '
                              'Data Schema must support all protocols that are described in “Data Schema Parse”')
     args = parser.parse_args()
-    mydict = vars(args)
-    print("params input:" + str(mydict))
-    return mydict
+    print("params input:" + str(vars(args)))
+    return vars(args)
 
 
 def read_json(path):
-    pp = str(path['data_schema'])
+    print("path:" + path)
+    pp = str(path)
     if pp.startswith("{"):
         json1_str = pp
     if pp.startswith("."):
@@ -100,7 +100,7 @@ def create_file(com):
 
 
 def generate_json_output(mydict):
-    return read_json(mydict)
+    return read_json(mydict['data_schema'])
 
 
 def clear_path(paths, filenames):
@@ -116,7 +116,7 @@ def cf_multiprocessing(mydict):
     outdict = []
     while i < mydict["file_count"]:
         ll["path"].append(generate_json_file_name(mydict, i))
-        ll["json"].append(read_json(mydict))
+        ll["json"].append(read_json(mydict['data_schema']))
         outdict.append(ll)
         i = i + 1
         ll = {"path": [], "json": []}
