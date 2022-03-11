@@ -77,17 +77,17 @@ def generate_name():
     return output
 
 
-def generate_json_file_name(mydict, i):
+def generate_json_file_name(paths, filename, prefix, i):
     complete_name = None
-    if mydict["prefix"] == "count":
-        complete_name = os.path.join(mydict["path_to_save_files"], mydict["file_name"] + "_" + str(i) + ".json")
-    if mydict["prefix"] == "random":
+    if prefix == "count":
+        complete_name = os.path.join(paths, filename + "_" + str(i) + ".json")
+    if prefix == "random":
         complete_name = os.path.join(
-            mydict["path_to_save_files"], mydict["file_name"] + "_" + (
+            paths, filename + "_" + (
                 ''.join(random.choice(string.digits) for _ in range(4))) + ".json")
-    if mydict["prefix"] == "uuid":
+    if prefix == "uuid":
         complete_name = os.path.join(
-            mydict["path_to_save_files"], mydict["file_name"] + "_" + str(uuid.uuid4()) + ".json")
+            paths, filename + "_" + str(uuid.uuid4()) + ".json")
     return complete_name
 
 
@@ -97,10 +97,6 @@ def create_file(com):
     print("with json data:" + str(com["json"]))
     with open(out, 'w') as f:
         json.dump(com["json"], f, ensure_ascii=False)
-
-
-def generate_json_output(mydict):
-    return read_json(mydict['data_schema'])
 
 
 def clear_path(paths, filenames):
@@ -115,7 +111,8 @@ def cf_multiprocessing(mydict):
     i = 0
     outdict = []
     while i < mydict["file_count"]:
-        ll["path"].append(generate_json_file_name(mydict, i))
+        ll["path"].append(
+            generate_json_file_name(mydict["path_to_save_files"], mydict["file_name"], mydict["prefix"], i))
         ll["json"].append(read_json(mydict['data_schema']))
         outdict.append(ll)
         i = i + 1
@@ -135,11 +132,14 @@ def cf_multiprocessing(mydict):
 def main():
     pars = argparse.ArgumentParser(prog='Console Utility (CU)')
     mydict = print_name_address(pars)
+    path = mydict["path_to_save_files"]
+    filename = mydict["file_name"]
+    clearpath = mydict["clear_path"]
     print(mydict)
-    if not os.path.exists(mydict["path_to_save_files"]):
-        os.makedirs(mydict["path_to_save_files"])
-    if mydict["clear_path"] is True:
-        clear_path(mydict["path_to_save_files"], mydict["file_name"])
+    if not os.path.exists(path):
+        os.makedirs(path)
+    if clearpath is True:
+        clear_path(path, filename)
     cf_multiprocessing(mydict)
 
 

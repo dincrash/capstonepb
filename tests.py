@@ -5,7 +5,6 @@ from unittest.mock import Mock
 import pytest
 import json
 import os
-import time
 
 DATA_SCHEM_FORTEST = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": " \
                      "\"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 15)\"}"
@@ -74,6 +73,7 @@ def test_countfiles_multiprocessing():
 def test_generate_json_file_name():
     # test generate json name for files
     i = 1
+    path = "./output"
+    filename = "test"
     prefix = "count"
-    mydict = {"prefix": prefix, "path_to_save_files": "./output", "file_name": "test"}
-    assert generate_json_file_name(mydict, i) == "./output/test_1.json"
+    assert generate_json_file_name(path, filename, prefix, i) == "./output/test_1.json"
