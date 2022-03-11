@@ -1,26 +1,29 @@
+from unittest import mock
+
 from magicgenerator import read_json, cf_multiprocessing, clear_path, create_file, generate_json_file_name
 from unittest.mock import Mock
 import pytest
 import json
 import os
 import time
+
 DATA_SCHEM_FORTEST = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": " \
                      "\"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 15)\"}"
 
 
 @pytest.mark.parametrize("a, expected_result, expected_str",
-                         [({'data_schema': "./schema.json"}, 100,'partner'), ({'data_schema': DATA_SCHEM_FORTEST}, 100,'partner')])
-def test_datatype(a, expected_result,expected_str):
+                         [({'data_schema': "./schema.json"}, 100, 'partner'),
+                          ({'data_schema': DATA_SCHEM_FORTEST}, 100, 'partner')])
+def test_datatype(a, expected_result, expected_str):
     assert type(read_json(a)['age']) is type(expected_result)
     assert type(read_json(a)['date']) is type(expected_result)
     assert type(read_json(a)['name']) is type(expected_str)
     assert type(read_json(a)['type']) is type(expected_str)
 
 
-@pytest.mark.parametrize("a, expected_result",
-                         [({'data_schema': "./schema.json"}, 100), ({'data_schema': DATA_SCHEM_FORTEST}, 100)])
-def test_dataschema(a, expected_result):
-    assert read_json(a)['age'] <= expected_result
+def test_dataschema():
+    with mock.patch('random.choice', mock.Mock(return_value='client')):
+        assert "client" == read_json({'data_schema': "./schema.json"})['type']
 
 
 def test_temporaryfiles(tmp_path):
@@ -32,7 +35,7 @@ def test_temporaryfiles(tmp_path):
 
 
 def test_clearpath():
-    output ="./output"
+    output = "./output"
     if not os.path.exists(output):
         os.makedirs(output)
     mydict = {"path_to_save_files": "./output", "file_name": "super_data777"}
