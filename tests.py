@@ -52,7 +52,7 @@ def test_savedfiles():
         os.makedirs(output)
     ll = {"path": "./output/super_data888", "json": "create file super_data888"}
     create_file(ll)
-    assert os.path.isfile(ll["path"]) is True
+    assert os.path.isfile(ll["path"])
 
 
 def test_countfiles_multiprocessing():

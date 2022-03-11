@@ -102,8 +102,8 @@ def create_file(com):
 def clear_path(paths, filenames):
     for filename in os.listdir(paths):
         if filename.startswith(filenames):
-            os.remove(paths + "/" + filename)
-            print("file removed:" + paths + "/" + filename)
+            os.remove(os.path.join(paths, filename))
+            print("file removed:" + os.path.join(paths, filename))
 
 
 def cf_multiprocessing(filecount, path, filename, prefix, dataschema, multiprocessing):
