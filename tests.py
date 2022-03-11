@@ -3,15 +3,18 @@ from unittest.mock import Mock
 import pytest
 import json
 import os
-
+import time
 DATA_SCHEM_FORTEST = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": " \
                      "\"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 15)\"}"
 
 
-@pytest.mark.parametrize("a, expected_result",
-                         [({'data_schema': "./schema.json"}, 100), ({'data_schema': DATA_SCHEM_FORTEST}, 100)])
-def test_datatype(a, expected_result):
+@pytest.mark.parametrize("a, expected_result, expected_str",
+                         [({'data_schema': "./schema.json"}, 100,'partner'), ({'data_schema': DATA_SCHEM_FORTEST}, 100,'partner')])
+def test_datatype(a, expected_result,expected_str):
     assert type(read_json(a)['age']) is type(expected_result)
+    assert type(read_json(a)['date']) is type(expected_result)
+    assert type(read_json(a)['name']) is type(expected_str)
+    assert type(read_json(a)['type']) is type(expected_str)
 
 
 @pytest.mark.parametrize("a, expected_result",
@@ -25,7 +28,7 @@ def test_temporaryfiles(tmp_path):
     d.mkdir()
     p = d / "schema.json"
     m = Mock()
-    m.main(p)
+    print(m.main(p))
 
 
 def test_clearpath():
