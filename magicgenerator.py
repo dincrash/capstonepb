@@ -53,7 +53,7 @@ def print_name_address(parser: argparse.Namespace) -> dict:
 
 
 def read_json(path):
-    print("path:" + path)
+    # print("path:" + path)
     pp = str(path)
     if pp.startswith("{"):
         json1_str = pp
@@ -61,12 +61,40 @@ def read_json(path):
         with open(pp, 'r', encoding="CP1251") as f:
             json1_str = f.read()
     json1_data = json.loads(json1_str)
-    timestamp = int(time.time())
-    jsontype = random.choice(json1_data["type"])
-    age = (re.sub('[int:rand(),]', '', json1_data['age']))
-    age = age.split()
-    age = random.randint(int(age[0]), int(age[1]))
-    output = {"date": timestamp, "name": generate_name(), "type": jsontype, "age": age}
+    output = {}
+    for i in json1_data:
+        # type timestamp, str and int.
+        if json1_data[i].startswith('timestamp'):
+            if json1_data[i].startswith('timestamp'):
+                output.update({i: int(time.time())})
+            if json1_data[i].startswith('timestamp:r'):
+                print("error: timestamp:rand()")
+                exit(1)
+        if json1_data[i].startswith("str:"):
+            if json1_data[i].startswith('str:'):
+                output.update({i: re.sub('str:', '', (json1_data[i]))})
+            if json1_data[i].startswith('str:rand('):
+                print("error: str:rand()")
+                exit(1)
+            if json1_data[i] == 'str:rand':
+                output.update({i: generate_name()})
+            if json1_data[i].startswith("str:["):
+                output.update({i: random.choice(eval(re.sub('str:', '', (json1_data[i]))))})
+
+        if json1_data[i].startswith("int:"):
+            if json1_data[i].startswith("int:rand("):
+                out = (re.sub('[int:rand(),]', '', json1_data['age']))
+                out = out.split()
+                out = random.randint(int(out[0]), int(out[1]))
+                output.update({i: out})
+            elif json1_data[i] == 'int:rand':
+                output.update({i: random.randint(0, 10000)})
+            elif json1_data[i] == 'int:':
+                output.update({i: None})
+            else:
+                print("error: int rand or rand(1,20),could not be converted to int type")
+                exit(1)
+
     print("generate string for json file" + str(output))
     return output
 

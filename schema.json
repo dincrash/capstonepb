@@ -1,6 +1,7 @@
 {
-  "date": "timestamp:",
-  "name": "str: rand",
-  "type": ["client", "partner", "government"],
+  "date": "timestamp",
+  "name": "str:rand",
+  "string": "int:",
+  "type": "str:['client', 'partner', 'government']",
   "age": "int:rand(1, 90)"
 }
