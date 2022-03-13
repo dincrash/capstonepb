@@ -6,14 +6,13 @@ import pytest
 import json
 import os
 
-DATA_SCHEM_FORTEST = "{\"date\": \"timestamp:\",\"name\": \"str:rand\",\"type\": " \
-                     "\"['client', 'partner', 'government']\",\"age\": \"int:rand(1, 15)\"}"
+DATA_SCHEM_FORTEST = "{\"date\": \"timestamp\",\"name\": \"str:rand\",\"type\": \"str:['client', 'partner', 'government']\",\"age\": \"int:rand(1, 15)\"}"
 
 
 @pytest.mark.parametrize("a, expected_result, expected_str",
-                         [("./schema.json", 100, 'partner'),
-                          (DATA_SCHEM_FORTEST, 100, 'partner')])
+                         [("./schema.json", 100, 'partner'), (DATA_SCHEM_FORTEST, 100, 'client')])
 def test_datatype(a, expected_result, expected_str):
+    print(read_json(a)['age'])
     assert type(read_json(a)['age']) is type(expected_result)
     assert type(read_json(a)['date']) is type(expected_result)
     assert type(read_json(a)['name']) is type(expected_str)
