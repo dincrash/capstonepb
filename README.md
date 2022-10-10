@@ -23,3 +23,6 @@ parammeters
 2) With schema entered to command line. Data Schema must support all protocols that are described in “Data Schema Parse”')
 
 magicgenerator.py --file_count=20 --multiprocessing=2
+
+also
+i have usefull scripts in folder scripts
